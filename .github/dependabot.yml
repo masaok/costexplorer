@@ -1,0 +1,24 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # scripts/checks/versions.mjs fails when these two disagree, so they move together.
+      next:
+        patterns: ["next", "eslint-config-next"]
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+    ignore:
+      # Held at the Node major in .nvmrc. Bump it by hand together with .nvmrc and engines.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directories: ["/", "/.github/actions/setup"]
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
