@@ -1,6 +1,14 @@
 # costexplorer
 
-A Next.js 16 app. It currently serves only the create-next-app starting page, and the tooling around it is in place for the first real feature.
+The open-source engine behind Cost Explorer. It reads a cloud cost export and reports what is being wasted, with the saving and the fix for each finding.
+
+The repository is a pnpm workspace. The engine is built as packages under `packages/`, and a Next.js 16 app at the root will host the docs and the rule catalog. The app still serves the create-next-app starting page.
+
+| Package         | Holds                                                                                               |
+| --------------- | --------------------------------------------------------------------------------------------------- |
+| `packages/core` | The cost record schema, aligned to the FinOps FOCUS columns, money math and the `Finding` contract. |
+
+The engine packages are framework-free TypeScript. They import neither React nor Next.js, so a command-line tool and a worker can run them.
 
 ## Run it
 
@@ -20,7 +28,7 @@ Open http://localhost:3000. The homepage is `src/features/home/home-page.tsx`.
 pnpm verify
 ```
 
-This runs typecheck, lint, format check, repository checks, tests, the production build and a smoke test of every URL. CI runs the same commands as separate jobs in `.github/workflows/ci.yml`.
+This runs typecheck, lint, format check, repository checks, tests, the production build and a smoke test of every URL. The tests include the package tests, which must cover 90% of the package code. CI runs the same commands as separate jobs in `.github/workflows/ci.yml`.
 
 ## Documentation
 

@@ -40,3 +40,12 @@ test("process.env is rejected anywhere in src", async () => {
     ["no-restricted-properties"],
   );
 });
+
+test("an engine package may not import React or Next.js", async () => {
+  const code = 'import "react";\nimport "next/link";\nimport "zod";\n';
+  assert.deepEqual(await ruleIds("packages/core/src/example.ts", code), [
+    "no-restricted-imports",
+    "no-restricted-imports",
+  ]);
+  assert.deepEqual(await ruleIds("packages/ui/src/example.tsx", 'import "react";\n'), []);
+});

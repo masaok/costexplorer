@@ -15,6 +15,12 @@ const noProcessEnv = {
     'Read configuration in one module that starts with `import "server-only"`, then exempt only that file from this rule.',
 };
 
+const frameworkImport = {
+  regex: "^(react|react-dom|next)(/|$)",
+  message:
+    "The engine packages stay framework-free so the CLI and the worker can run them. Rendering belongs in packages/ui.",
+};
+
 const features = readdirSync("src/features", { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
   .map((entry) => entry.name);
@@ -64,6 +70,13 @@ const eslintConfig = defineConfig([
       ],
     },
   })),
+  {
+    files: ["packages/**"],
+    ignores: ["packages/ui/**"],
+    rules: {
+      "no-restricted-imports": ["error", { patterns: [frameworkImport] }],
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -71,6 +84,7 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "coverage/**",
   ]),
 ]);
 
