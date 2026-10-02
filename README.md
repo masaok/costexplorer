@@ -1,6 +1,21 @@
 # costexplorer
 
-The open-source engine behind Cost Explorer. It reads a cloud cost export and reports what is being wasted, with the saving and the fix for each finding.
+Find the cloud spend you forgot you're paying for.
+
+This is the open-source engine behind [Cost Explorer](https://costexplorer.net). It reads a cloud cost export and a resource inventory, and reports what is being wasted. Findings are ranked by dollars saved per month, and each one carries its evidence, a confidence level and the exact fix. The engine only reads. You review and apply every fix yourself.
+
+Cost Explorer is an independent product. It is not affiliated with Amazon Web Services and it is not the AWS billing tool of the same name.
+
+## Status
+
+The engine is early. AWS comes first, and GCP follows once the AWS findings are solid.
+
+- One rule is in the catalog so far: `aws.ebs.unattached`, which finds EBS volumes attached to no instance for 14 days or more.
+- There is no command-line tool yet. The packages are libraries, and `runAnalyzers` is the entry point.
+
+To add a rule, follow [Add an analyzer](CONTRIBUTING.md#add-an-analyzer).
+
+## Layout
 
 The repository is a pnpm workspace. The engine is built as packages under `packages/`, and a Next.js 16 app at the root will host the docs and the rule catalog. The app still serves the create-next-app starting page.
 
@@ -39,3 +54,7 @@ This runs typecheck, lint, format check, repository checks, tests, the productio
 - [Agent evals](docs/agent-evals.md). Scenarios that test the agent instructions.
 - [Contributing](CONTRIBUTING.md). The process for a change.
 - `AGENTS.md`. The rules for coding agents.
+
+## License
+
+Apache-2.0.
