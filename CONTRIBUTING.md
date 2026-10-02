@@ -17,6 +17,14 @@ The install sets up two git hooks. The pre-commit hook formats the files you sta
 4. Run `pnpm verify` before you push. It runs what CI runs.
 5. Open one pull request per issue. Say why the change exists, what is in scope and how you verified it, and paste the `pnpm verify` output.
 
+## Add an analyzer
+
+1. Write the rule as `packages/analyzers/src/<provider>/<rule>.ts`. It exports one `Analyzer`, and `analyze` is a pure function of the scan input. `aws/ebs-unattached.ts` is the model.
+2. Put its test beside it. Build the input with the helpers in `packages/analyzers/src/fixtures.ts`, and assert the whole finding at least once, including the saving and the commands.
+3. Report the lower figure when unsure, round the saving down with `floorToCents`, and put the numbers the estimate rests on in `evidence`.
+4. If the rule reads a resource type that does not exist yet, add it to `packages/core/src/resource.ts`.
+5. Add the rule to the `analyzers` list in `packages/analyzers/src/index.ts`.
+
 ## Formatting and lint
 
 `pnpm format` rewrites files and `pnpm lint:fix` applies lint fixes. Hooks and CI only run the read-only `pnpm format:check` and `pnpm lint`, so a violation is reported and never silently repaired.
