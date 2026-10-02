@@ -88,14 +88,16 @@ JSON
 
 Each item names what would change the answer.
 
-| Id              | Technique                        | Why not here                                                                                                                                                  | Adopt it when                                                                                       |
-| --------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| 4.3             | Import smoke test                | The only entry points outside Next.js are `scripts/check.mjs`, `scripts/smoke.mjs` and `scripts/preinstall.mjs`. CI executes all three for real in every run. | The repository gains a command-line script, a daemon or a scheduled job that CI does not run.       |
-| 4.4             | Changed-files gate               | The full gate takes about 13 seconds on a laptop. Skip logic is untested code that can skip by accident, and it would save seconds.                           | The full CI run takes longer than about ten minutes.                                                |
-| 5.1 to 5.3, 5.5 | Migrations and the runner lock   | The app has no database and no other durable state.                                                                                                           | The first table, bucket, queue or index is added.                                                   |
-| 2.1             | The `server-only` marker package | There is no server-only module to mark. Declaring the dependency with no importer would be configuration without effect.                                      | The first module reads a credential. [Guardrails](guardrails.md#adding-a-credential) has the steps. |
-| none            | A unit test runner               | Nothing in `src` has branching logic to test. The repository checks use the test runner built into Node.                                                      | A feature gains logic that a request to the page cannot prove.                                      |
-| none            | Browser tests in CI              | They need a browser download on every run, and the app has no interactive component yet.                                                                      | The first interactive component ships.                                                              |
+| Id              | Technique                        | Why not here                                                                                                                                                                                     | Adopt it when                                                                                       |
+| --------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| 4.3             | Import smoke test                | The only entry points outside Next.js are `scripts/check.mjs`, `scripts/smoke.mjs` and `scripts/preinstall.mjs`. CI executes all three for real in every run.                                    | The repository gains a command-line script, a daemon or a scheduled job that CI does not run.       |
+| 4.4             | Changed-files gate               | The full gate takes about 13 seconds on a laptop. Skip logic is untested code that can skip by accident, and it would save seconds.                                                              | The full CI run takes longer than about ten minutes.                                                |
+| 5.1 to 5.3, 5.5 | Migrations and the runner lock   | The app has no database and no other durable state.                                                                                                                                              | The first table, bucket, queue or index is added.                                                   |
+| 2.1             | The `server-only` marker package | There is no server-only module to mark. Declaring the dependency with no importer would be configuration without effect.                                                                         | The first module reads a credential. [Guardrails](guardrails.md#adding-a-credential) has the steps. |
+| none            | Turborepo                        | The whole gate takes about 15 seconds with one package. A task cache is a second source of truth for what ran.                                                                                   | The gate takes longer than a few minutes, or packages need a build order pnpm cannot infer.         |
+| none            | Changesets                       | Every package is private and unpublished. Release tooling with nothing to release is configuration without effect.                                                                               | The first package is published to npm.                                                              |
+| none            | Moving the app to `apps/web`     | The app stays at the repository root and the engine lives beside it in `packages/`. The move rewrites every check, the feature map and the agent instructions, and no engine code depends on it. | A second app is added, or the root app's configuration starts leaking into a package.               |
+| none            | Browser tests in CI              | They need a browser download on every run, and the app has no interactive component yet.                                                                                                         | The first interactive component ships.                                                              |
 
 ## Tool failure modes
 
@@ -122,4 +124,11 @@ FAIL GET / 200, text "Welcome back"
 FAIL built route /favicon.ico has no row in docs/feature-map.md
 FAIL /: expected 200 and text "Welcome back"
 1 surfaces requested, 2 failures
+```
+
+The coverage threshold was failed by hand on 2026-10-01 by leaving one branch of the ranking comparator untested.
+
+```text
+Branches     : 88.88% ( 8/9 )
+ERROR: Coverage for branches (88.88%) does not meet global threshold (90%)
 ```

@@ -13,8 +13,9 @@ The install sets up two git hooks. The pre-commit hook formats the files you sta
 
 1. Branch from `main`. Nothing is pushed to `main` directly.
 2. Keep a feature's files together in `src/features/<name>/`. A new URL also needs a row in the [feature map](docs/feature-map.md).
-3. Run `pnpm verify` before you push. It runs what CI runs.
-4. Open one pull request per issue. Say why the change exists, what is in scope and how you verified it, and paste the `pnpm verify` output.
+3. Engine code goes in `packages/<name>/src/` with its test beside it as `<file>.test.ts`. Import a sibling file with its `.ts` extension, and do not import React or Next.js there.
+4. Run `pnpm verify` before you push. It runs what CI runs.
+5. Open one pull request per issue. Say why the change exists, what is in scope and how you verified it, and paste the `pnpm verify` output.
 
 ## Formatting and lint
 
