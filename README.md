@@ -4,9 +4,10 @@ The open-source engine behind Cost Explorer. It reads a cloud cost export and re
 
 The repository is a pnpm workspace. The engine is built as packages under `packages/`, and a Next.js 16 app at the root will host the docs and the rule catalog. The app still serves the create-next-app starting page.
 
-| Package         | Holds                                                                                               |
-| --------------- | --------------------------------------------------------------------------------------------------- |
-| `packages/core` | The cost record schema, aligned to the FinOps FOCUS columns, money math and the `Finding` contract. |
+| Package              | Holds                                                                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/core`      | The cost record schema, aligned to the FinOps FOCUS columns, the resource inventory types, money math and the `Finding` contract. |
+| `packages/analyzers` | The waste rules, one file per rule under `src/<provider>/`, and `runAnalyzers`, which runs them over one scan.                    |
 
 The engine packages are framework-free TypeScript. They import neither React nor Next.js, so a command-line tool and a worker can run them.
 
